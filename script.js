@@ -90,7 +90,7 @@ async function calculatePrice() {
     }
 
     // Логика подстановки категории для поиска в таблице
-    if (bahuoCategories.includes(category)) {
+    if (baihuoCategories.includes(category)) {
         category = "百货";
     } else if (category === "Одежда из текстиля") {
         category = "服装";
@@ -168,7 +168,7 @@ function updateDeliveryBlock() {
         return;
     }
     let searchCategory = category;
-    if (bahuoCategories.includes(category)) searchCategory = "百货";
+    if (baihuoCategories.includes(category)) searchCategory = "百货";
     else if (category === "Одежда из текстиля") searchCategory = "服装";
     else if (category === "Обувь") searchCategory = "鞋";
     else if (category === "Мебель") searchCategory = "家具";
