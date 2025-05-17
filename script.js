@@ -91,13 +91,17 @@ async function calculatePrice() {
     // Логика подстановки категории для поиска в таблице
     if (baihuoCategories.includes(category)) {
         category = "百货";
-    } else if (category === "Одежда из текстиля") {
+    } else if (category === "Одежда") {
         category = "服装";
     } else if (category === "Обувь") {
         category = "鞋";
     } else if (category === "Мебель") {
         category = "家具";
-    } else if (category === "Бытовая техника") {
+    } else if (
+        category === "Бытовая техника" ||
+        category === "Телевизоры" ||
+        category === "Электротехника (радиоприёмники, микрофоны, проекторы)"
+    ) {
         category = "家电";
     }
 
@@ -168,10 +172,14 @@ function updateDeliveryBlock() {
     }
     let searchCategory = category;
     if (baihuoCategories.includes(category)) searchCategory = "百货";
-    else if (category === "Одежда из текстиля") searchCategory = "服装";
+    else if (category === "Одежда") searchCategory = "服装";
     else if (category === "Обувь") searchCategory = "鞋";
     else if (category === "Мебель") searchCategory = "家具";
-    else if (category === "Бытовая техника") searchCategory = "家电";
+    else if (
+        category === "Бытовая техника" ||
+        category === "Телевизоры" ||
+        category === "Электротехника (радиоприёмники, микрофоны, проекторы)"
+    ) searchCategory = "家电";
     const options = deliveryTimes.filter(dt => dt.category === searchCategory);
     if (options.length === 2) {
         deliveryBlock.style.display = '';
