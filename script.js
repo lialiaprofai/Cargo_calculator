@@ -10,6 +10,8 @@ const DELIVERY_TIME_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQp2B
 // Кэш для хранения данных таблицы
 let priceData = null;
 let deliveryTimes = [];
+let fastDays = '';
+let slowDays = '';
 
 // Категории 百货
 const baihuoCategories = [
@@ -17,8 +19,8 @@ const baihuoCategories = [
     "Автозапчасти",
     "Бижутерия",
     "Бирки",
-    "Бытовая техника",
     "Галантерея (сумки, перчатки, галстуки)",
+    "Запчасти для оборудования",
     "Игрушки",
     "Инструменты для маникюра",
     "Канцелярские товары",
@@ -27,12 +29,9 @@ const baihuoCategories = [
     "Рождественские товары",
     "Солнцезащитные очки",
     "Спортивные товары",
-    "Телевизоры",
     "Товары для питомцев (клетки, поводки, ошейники)",
     "Упаковочные пакеты",
-    "Футляры для очков",
-    "Электротехника (радиоприёмники, микрофоны, проекторы)",
-    "Запчасти для оборудования"
+    "Футляры для очков"
 ];
 
 // Загрузка данных из таблицы
@@ -179,17 +178,32 @@ function updateDeliveryBlock() {
         radioGroup.style.display = '';
         const fast = options.find(o=>o.deliveryMethod.includes('быстрый') || o.deliveryMethod.includes('特快'));
         const slow = options.find(o=>o.deliveryMethod.includes('обычный') || o.deliveryMethod.includes('普快'));
-        document.getElementById('delivery-fast-text').textContent = `Быстрый (${fast.days})`;
-        document.getElementById('delivery-slow-text').textContent = `Обычный (${slow.days})`;
-        deliveryTimeDiv.textContent = '';
+        fastDays = fast.days;
+        slowDays = slow.days;
+        document.getElementById('delivery-fast-text').textContent = `Быстрый`;
+        document.getElementById('delivery-slow-text').textContent = `Обычный`;
+        updateDeliveryTime();
+        document.getElementById('delivery-fast').onchange = updateDeliveryTime;
+        document.getElementById('delivery-slow').onchange = updateDeliveryTime;
     } else if (options.length === 1) {
         deliveryBlock.style.display = '';
         radioGroup.style.display = 'none';
+        fastDays = '';
+        slowDays = '';
         deliveryTimeDiv.textContent = `Доставка: ${options[0].days}`;
     } else {
         deliveryBlock.style.display = 'none';
         deliveryTimeDiv.textContent = '';
         radioGroup.style.display = '';
+    }
+}
+
+function updateDeliveryTime() {
+    const deliveryTimeDiv = document.getElementById('delivery-time');
+    if (document.getElementById('delivery-fast').checked) {
+        deliveryTimeDiv.textContent = `Срок доставки: ${fastDays}`;
+    } else if (document.getElementById('delivery-slow').checked) {
+        deliveryTimeDiv.textContent = `Срок доставки: ${slowDays}`;
     }
 }
 
