@@ -15,9 +15,44 @@
                 <label for="category">Категория товара:</label>
                 <select id="category" required>
                     <option value="">Выберите категорию</option>
-                    <option value="Очки">Очки</option>
+                    <option value="Аксессуары">Аксессуары</option>
+                    <option value="Автозапчасти">Автозапчасти</option>
+                    <option value="Бижутерия">Бижутерия</option>
+                    <option value="Бирки">Бирки</option>
+                    <option value="Бытовая техника">Бытовая техника</option>
+                    <option value="Галантерея (сумки, перчатки, галстуки)">Галантерея (сумки, перчатки, галстуки)</option>
+                    <option value="Игрушки">Игрушки</option>
+                    <option value="Инструменты для маникюра">Инструменты для маникюра</option>
+                    <option value="Канцелярские товары">Канцелярские товары</option>
+                    <option value="Кисти для макияжа">Кисти для макияжа</option>
                     <option value="Мебель">Мебель</option>
+                    <option value="Носки">Носки</option>
+                    <option value="Обувь">Обувь</option>
+                    <option value="Одежда из текстиля">Одежда из текстиля</option>
+                    <option value="Рождественские товары">Рождественские товары</option>
+                    <option value="Солнцезащитные очки">Солнцезащитные очки</option>
+                    <option value="Спортивные товары">Спортивные товары</option>
+                    <option value="Телевизоры">Телевизоры</option>
+                    <option value="Товары для питомцев (клетки, поводки, ошейники)">Товары для питомцев (клетки, поводки, ошейники)</option>
+                    <option value="Упаковочные пакеты">Упаковочные пакеты</option>
+                    <option value="Футляры для очков">Футляры для очков</option>
+                    <option value="Электротехника (радиоприёмники, микрофоны, проекторы)">Электротехника (радиоприёмники, микрофоны, проекторы)</option>
+                    <option value="Запчасти для оборудования">Запчасти для оборудования</option>
                 </select>
+            </div>
+            <div class="input-group" id="delivery-method-block" style="display:none">
+                <label>Способ доставки:</label>
+                <div class="radio-group">
+                    <label for="delivery-fast">
+                        <input type="radio" id="delivery-fast" name="delivery" value="特快" checked>
+                        Быстрый
+                    </label>
+                    <label for="delivery-slow">
+                        <input type="radio" id="delivery-slow" name="delivery" value="普快">
+                        Обычный
+                    </label>
+                </div>
+                <div id="delivery-time" style="margin-top:8px; color:var(--primary); font-size:15px;"></div>
             </div>
             <div class="input-group">
                 <label for="weight">Вес (кг):</label>
@@ -33,4 +68,4 @@
     </div>
     <script src="script.js"></script>
 </body>
-</html>
+</html> 
