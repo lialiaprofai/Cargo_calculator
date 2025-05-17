@@ -183,8 +183,8 @@ function updateDeliveryBlock() {
         document.getElementById('delivery-fast-text').textContent = `Быстрый`;
         document.getElementById('delivery-slow-text').textContent = `Обычный`;
         updateDeliveryTime();
-        document.getElementById('delivery-fast').onchange = updateDeliveryTime;
-        document.getElementById('delivery-slow').onchange = updateDeliveryTime;
+        document.getElementById('delivery-fast').onclick = updateDeliveryTime;
+        document.getElementById('delivery-slow').onclick = updateDeliveryTime;
     } else if (options.length === 1) {
         deliveryBlock.style.display = '';
         radioGroup.style.display = 'none';
