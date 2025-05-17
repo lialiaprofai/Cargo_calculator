@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор стоимости</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f7f7; padding: 30px; }
+    .calc { background: #fff; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
+    label { display: block; margin-top: 15px; }
+    select, input { width: 100%; padding: 8px; margin-top: 5px; }
+    .result { margin-top: 20px; font-size: 1.2em; color: #003261; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="calc">
+    <h2>Калькулятор стоимости доставки</h2>
+    <label>Категория груза:
+      <select id="category">
+        <option value="100">Категория 1 (100 руб/кг)</option>
+        <option value="150">Категория 2 (150 руб/кг)</option>
+        <option value="200">Категория 3 (200 руб/кг)</option>
+      </select>
+    </label>
+    <label>Вес (кг):
+      <input type="number" id="weight" min="0" step="0.01" value="1">
+    </label>
+    <button onclick="calculate()">Рассчитать</button>
+    <div class="result" id="result"></div>
+  </div>
+  <script>
+    function calculate() {
+      var pricePerKg = parseFloat(document.getElementById('category').value);
+      var weight = parseFloat(document.getElementById('weight').value);
+      if (isNaN(weight) || weight <= 0) {
+        document.getElementById('result').innerText = "Введите корректный вес!";
+        return;
+      }
+      var total = pricePerKg * weight;
+      document.getElementById('result').innerText = "Итого: " + total.toFixed(2) + " руб.";
+    }
+  </script>
+</body>
+</html>
