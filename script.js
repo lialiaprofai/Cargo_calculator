@@ -2,11 +2,38 @@
 let tg = window.Telegram.WebApp;
 tg.expand();
 
-// URL таблицы Google
+// URL таблицы Google (основная)
 const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQp2Bm2X0WNNGOssLIJHmbcIdPTwHbUoKFjaFojx8XPKFrvEG5LI0AuG2BNhMaCu-e2CAMC0YWeJgKn/pub?gid=0&single=true&output=csv';
+// URL delivery time
+const DELIVERY_TIME_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQp2Bm2X0WNNGOssLIJHmbcIdPTwHbUoKFjaFojx8XPKFrvEG5LI0AuG2BNhMaCu-e2CAMC0YWeJgKn/pub?gid=442095192&single=true&output=csv';
 
 // Кэш для хранения данных таблицы
 let priceData = null;
+let deliveryTimes = [];
+
+// Категории 百货
+const baihuoCategories = [
+    "Аксессуары",
+    "Автозапчасти",
+    "Бижутерия",
+    "Бирки",
+    "Бытовая техника",
+    "Галантерея (сумки, перчатки, галстуки)",
+    "Игрушки",
+    "Инструменты для маникюра",
+    "Канцелярские товары",
+    "Кисти для макияжа",
+    "Носки",
+    "Рождественские товары",
+    "Солнцезащитные очки",
+    "Спортивные товары",
+    "Телевизоры",
+    "Товары для питомцев (клетки, поводки, ошейники)",
+    "Упаковочные пакеты",
+    "Футляры для очков",
+    "Электротехника (радиоприёмники, микрофоны, проекторы)",
+    "Запчасти для оборудования"
+];
 
 // Загрузка данных из таблицы
 async function loadPriceData() {
@@ -14,8 +41,6 @@ async function loadPriceData() {
         const response = await fetch(SPREADSHEET_URL);
         const csvText = await response.text();
         const rows = csvText.split('\n').map(row => row.split(','));
-        
-        // Преобразование данных в удобный формат
         priceData = rows.slice(1).map(row => ({
             category: row[0],
             deliveryMethod: row[1],
@@ -28,27 +53,62 @@ async function loadPriceData() {
     }
 }
 
+// Загрузка сроков доставки
+async function loadDeliveryTimes() {
+    try {
+        const response = await fetch(DELIVERY_TIME_URL);
+        const csvText = await response.text();
+        const rows = csvText.split('\n').map(row => row.split(','));
+        deliveryTimes = rows.slice(1).map(row => ({
+            category: row[0].trim(),
+            deliveryMethod: row[2].trim(),
+            days: row[3].trim()
+        }));
+    } catch (error) {
+        console.error('Ошибка загрузки сроков доставки:', error);
+    }
+}
+
 // Расчет стоимости доставки
 async function calculatePrice() {
     if (!priceData) {
         await loadPriceData();
     }
 
-    const category = document.getElementById('category').value;
+    let category = document.getElementById('category').value;
     const weight = parseFloat(document.getElementById('weight').value);
     const volume = parseFloat(document.getElementById('volume').value);
+    let deliveryMethod = null;
+    const fastRadio = document.getElementById('delivery-fast');
+    const slowRadio = document.getElementById('delivery-slow');
+    if (fastRadio && fastRadio.checked) deliveryMethod = fastRadio.value;
+    if (slowRadio && slowRadio.checked) deliveryMethod = slowRadio.value;
 
     if (!category || isNaN(weight) || isNaN(volume)) {
         showError('Пожалуйста, заполните все поля корректно');
         return;
     }
 
+    // Логика подстановки категории для поиска в таблице
+    if (bahuoCategories.includes(category)) {
+        category = "百货";
+    } else if (category === "Одежда из текстиля") {
+        category = "服装";
+    } else if (category === "Обувь") {
+        category = "鞋";
+    } else if (category === "Мебель") {
+        category = "家具";
+    } else if (category === "Бытовая техника") {
+        category = "家电";
+    }
+
     const density = weight / volume;
     const resultDiv = document.getElementById('result');
 
-    // Поиск подходящей цены в зависимости от плотности
+    // Поиск подходящей цены в зависимости от плотности и способа доставки
     const priceInfo = priceData.find(item => 
         item.category === category && 
+        (!deliveryMethod || item.deliveryMethod === deliveryMethod) &&
         isInDensityRange(density, item.density)
     );
 
@@ -59,16 +119,12 @@ async function calculatePrice() {
 
     let totalPrice;
     if (priceInfo.price === 450) {
-        // Если цена указана за кубометр
         totalPrice = volume * priceInfo.price;
     } else {
-        // Если цена указана за килограмм
         totalPrice = weight * priceInfo.price;
     }
 
     showResult(`Стоимость доставки: ${totalPrice.toFixed(2)} $`);
-    
-    // Отправляем данные в Telegram
     tg.sendData(JSON.stringify({
         category: category,
         weight: weight,
@@ -78,16 +134,13 @@ async function calculatePrice() {
     }));
 }
 
-// Проверка, попадает ли плотность в указанный диапазон
 function isInDensityRange(density, rangeStr) {
     if (rangeStr === '100以下') return density < 100;
     if (rangeStr === '400以上') return density > 400;
-    
     const [min, max] = rangeStr.split('-').map(Number);
     return density >= min && density <= max;
 }
 
-// Показать результат
 function showResult(message) {
     const resultDiv = document.getElementById('result');
     resultDiv.textContent = message;
@@ -95,7 +148,6 @@ function showResult(message) {
     resultDiv.style.color = 'var(--tg-theme-text-color, #000000)';
 }
 
-// Показать ошибку
 function showError(message) {
     const resultDiv = document.getElementById('result');
     resultDiv.textContent = message;
@@ -103,11 +155,48 @@ function showError(message) {
     resultDiv.style.color = 'var(--tg-theme-destructive-text-color, #ff3b30)';
 }
 
-// Загрузка данных при загрузке страницы
+// Динамическое отображение способов доставки и сроков
+function updateDeliveryBlock() {
+    const category = document.getElementById('category').value;
+    const deliveryBlock = document.getElementById('delivery-method-block');
+    const deliveryTimeDiv = document.getElementById('delivery-time');
+    const radioGroup = document.querySelector('.radio-group');
+    if (!category) {
+        deliveryBlock.style.display = 'none';
+        deliveryTimeDiv.textContent = '';
+        radioGroup.style.display = '';
+        return;
+    }
+    let searchCategory = category;
+    if (bahuoCategories.includes(category)) searchCategory = "百货";
+    else if (category === "Одежда из текстиля") searchCategory = "服装";
+    else if (category === "Обувь") searchCategory = "鞋";
+    else if (category === "Мебель") searchCategory = "家具";
+    else if (category === "Бытовая техника") searchCategory = "家电";
+    const options = deliveryTimes.filter(dt => dt.category === searchCategory);
+    if (options.length === 2) {
+        deliveryBlock.style.display = '';
+        radioGroup.style.display = '';
+        const fast = options.find(o=>o.deliveryMethod.includes('быстрый') || o.deliveryMethod.includes('特快'));
+        const slow = options.find(o=>o.deliveryMethod.includes('обычный') || o.deliveryMethod.includes('普快'));
+        document.querySelector('label[for="delivery-fast"]').textContent = `Быстрый (${fast.days})`;
+        document.querySelector('label[for="delivery-slow"]').textContent = `Обычный (${slow.days})`;
+        deliveryTimeDiv.textContent = '';
+    } else if (options.length === 1) {
+        deliveryBlock.style.display = '';
+        radioGroup.style.display = 'none';
+        deliveryTimeDiv.textContent = `Доставка: ${options[0].days}`;
+    } else {
+        deliveryBlock.style.display = 'none';
+        deliveryTimeDiv.textContent = '';
+        radioGroup.style.display = '';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadPriceData();
-    
-    // Настройка темы Telegram
+    loadDeliveryTimes();
+    document.getElementById('category').addEventListener('change', updateDeliveryBlock);
     document.body.style.backgroundColor = tg.themeParams.bg_color;
     document.body.style.color = tg.themeParams.text_color;
 });
