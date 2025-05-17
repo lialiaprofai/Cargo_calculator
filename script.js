@@ -179,8 +179,8 @@ function updateDeliveryBlock() {
         radioGroup.style.display = '';
         const fast = options.find(o=>o.deliveryMethod.includes('быстрый') || o.deliveryMethod.includes('特快'));
         const slow = options.find(o=>o.deliveryMethod.includes('обычный') || o.deliveryMethod.includes('普快'));
-        document.querySelector('label[for="delivery-fast"]').textContent = `Быстрый (${fast.days})`;
-        document.querySelector('label[for="delivery-slow"]').textContent = `Обычный (${slow.days})`;
+        document.getElementById('delivery-fast-text').textContent = `Быстрый (${fast.days})`;
+        document.getElementById('delivery-slow-text').textContent = `Обычный (${slow.days})`;
         deliveryTimeDiv.textContent = '';
     } else if (options.length === 1) {
         deliveryBlock.style.display = '';
