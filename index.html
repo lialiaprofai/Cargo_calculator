@@ -21,6 +21,7 @@
                     <option value="Бирки">Бирки</option>
                     <option value="Бытовая техника">Бытовая техника</option>
                     <option value="Галантерея (сумки, перчатки, галстуки)">Галантерея (сумки, перчатки, галстуки)</option>
+                    <option value="Запчасти для оборудования">Запчасти для оборудования</option>
                     <option value="Игрушки">Игрушки</option>
                     <option value="Инструменты для маникюра">Инструменты для маникюра</option>
                     <option value="Канцелярские товары">Канцелярские товары</option>
@@ -28,7 +29,7 @@
                     <option value="Мебель">Мебель</option>
                     <option value="Носки">Носки</option>
                     <option value="Обувь">Обувь</option>
-                    <option value="Одежда из текстиля">Одежда из текстиля</option>
+                    <option value="Одежда">Одежда</option>
                     <option value="Рождественские товары">Рождественские товары</option>
                     <option value="Солнцезащитные очки">Солнцезащитные очки</option>
                     <option value="Спортивные товары">Спортивные товары</option>
@@ -37,7 +38,6 @@
                     <option value="Упаковочные пакеты">Упаковочные пакеты</option>
                     <option value="Футляры для очков">Футляры для очков</option>
                     <option value="Электротехника (радиоприёмники, микрофоны, проекторы)">Электротехника (радиоприёмники, микрофоны, проекторы)</option>
-                    <option value="Запчасти для оборудования">Запчасти для оборудования</option>
                 </select>
             </div>
             <div class="input-group" id="delivery-method-block" style="display:none">
@@ -45,11 +45,11 @@
                 <div class="radio-group">
                     <label for="delivery-fast">
                         <input type="radio" id="delivery-fast" name="delivery" value="特快" checked>
-                        Быстрый
+                        <span id="delivery-fast-text">Быстрый</span>
                     </label>
                     <label for="delivery-slow">
                         <input type="radio" id="delivery-slow" name="delivery" value="普快">
-                        Обычный
+                        <span id="delivery-slow-text">Обычный</span>
                     </label>
                 </div>
                 <div id="delivery-time" style="margin-top:8px; color:var(--primary); font-size:15px;"></div>
