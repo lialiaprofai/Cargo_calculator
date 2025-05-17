@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap');
+
+:root {
+  --primary: #003261;
+  --accent: #FD9A2B;
+  --bg: #F5F5F5;
+  --bg-alt: #FCF6EB;
+  --neutral-dark: #333333;
+  --neutral-light: #E0E0E0;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,27 +17,30 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     line-height: 1.6;
-    background-color: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #000000);
+    background-color: var(--bg-alt);
+    color: var(--neutral-dark);
     padding: 16px;
     -webkit-tap-highlight-color: transparent;
 }
 
 .container {
-    max-width: 100%;
-    margin: 0 auto;
-    background: var(--tg-theme-bg-color, #ffffff);
-    padding: 16px;
-    border-radius: 12px;
+    max-width: 420px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,50,97,0.08);
+    padding: 32px 24px;
 }
 
 h1 {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 32px;
+    color: var(--primary);
+    margin-bottom: 24px;
     text-align: center;
-    color: var(--tg-theme-text-color, #000000);
-    margin-bottom: 20px;
-    font-size: 20px;
+    font-weight: 700;
 }
 
 .calculator {
@@ -40,61 +55,86 @@ h1 {
     gap: 8px;
 }
 
-label {
+.input-group label {
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 16px;
+    color: var(--primary);
+    margin-bottom: 6px;
     font-weight: 500;
-    color: var(--tg-theme-hint-color, #999999);
-    font-size: 14px;
 }
 
 input, select {
+    width: 100%;
     padding: 12px;
-    border: 1px solid var(--tg-theme-hint-color, #dddddd);
+    border: 1px solid var(--neutral-light);
     border-radius: 8px;
     font-size: 16px;
-    background: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #000000);
-    width: 100%;
-    -webkit-appearance: none;
-    appearance: none;
+    margin-bottom: 18px;
+    background: var(--bg);
+    font-family: 'Roboto', Arial, sans-serif;
+    transition: border 0.2s;
 }
 
-select {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 16px;
-    padding-right: 40px;
+input:focus, select:focus {
+    border: 1.5px solid var(--accent);
+    outline: none;
 }
 
 button {
-    background-color: var(--tg-theme-button-color, #2481cc);
-    color: var(--tg-theme-button-text-color, #ffffff);
-    padding: 12px 20px;
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
     border: none;
     border-radius: 8px;
+    padding: 14px 0;
+    margin-top: 8px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    width: 100%;
-    transition: opacity 0.2s;
+    transition: background 0.2s;
 }
 
-button:active {
-    opacity: 0.8;
+button:hover {
+    background: #ffb25c;
 }
 
 .result {
-    margin-top: 20px;
+    margin-top: 24px;
     padding: 16px;
+    background: var(--bg);
     border-radius: 8px;
-    background-color: var(--tg-theme-secondary-bg-color, #f8f9fa);
-    display: none;
-    font-size: 16px;
+    color: var(--primary);
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 18px;
     text-align: center;
+    border: 1px solid var(--neutral-light);
 }
 
 .result.show {
     display: block;
+}
+
+.radio-group {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 10px;
+}
+
+.radio-group label {
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 16px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    accent-color: var(--accent);
+    width: 18px;
+    height: 18px;
 }
 
 /* Стили для мобильных устройств */
@@ -108,7 +148,7 @@ button:active {
     }
     
     h1 {
-        font-size: 18px;
+        font-size: 20px;
     }
     
     input, select, button {
